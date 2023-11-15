@@ -2,7 +2,6 @@
 
 namespace Atshike\Dingoa\Services;
 
-
 use Services\YiDaServices;
 
 class DingNoticeService
@@ -12,9 +11,9 @@ class DingNoticeService
      *  发送卡片消息
      *   https://open.dingtalk.com/document/isvapp/send-job-notification.
      *
-     * @param array $userid_list 接收用户ID [userid1,userid2...]
-     * @param string|null $str 消息内容
-     * @return void
+     * @param  array  $userid_list 接收用户ID [userid1,userid2...]
+     * @param  string|null  $str 消息内容
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function sendNotify(array $userid_list, string $content): void

@@ -4,9 +4,7 @@ namespace Services;
 
 use AlibabaCloud\SDK\Dingtalk\Voauth2_1_0\Dingtalk as Dingtalk2;
 use AlibabaCloud\SDK\Dingtalk\Voauth2_1_0\Models\GetAccessTokenRequest;
-
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Dingtalk;
-
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\CreateOrUpdateFormDataHeaders;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\CreateOrUpdateFormDataRequest;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\CreateOrUpdateFormDataResponse;
@@ -25,7 +23,6 @@ use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\UpdateFormDataHeaders;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\UpdateFormDataRequest;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\UpdateFormDataResponse;
 use AlibabaCloud\Tea\Utils\Utils\RuntimeOptions;
-
 use Atshike\Dingoa\Services\DingNoticeService;
 use Darabonba\OpenApi\Models\Config;
 use GuzzleHttp\Client;
@@ -44,6 +41,7 @@ class YiDaServices
     private string $appSecret;
 
     private string $appType;
+
     private string $systemToken;
 
     public function __construct()
@@ -90,16 +88,16 @@ class YiDaServices
     public function httpSend(string $url, array $params = [], string $method = 'POST'): ResponseInterface
     {
         $client = new Client();
-        if (!empty($params) && 'POST' == $method) {
+        if (! empty($params) && $method == 'POST') {
             $params = [
                 'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
                 'form_params' => $params,
             ];
         }
         $url_params = [
-            'access_token' => $this->access_token
+            'access_token' => $this->access_token,
         ];
-        if ('GET' == $method) {
+        if ($method == 'GET') {
             $url_params = array_merge($url_params, $params);
         }
         $url = $url.http_build_query($url_params);
@@ -138,7 +136,7 @@ class YiDaServices
             'currentPage' => $currentPage,
             'pageSize' => $pageSize,
         ];
-        if (!empty($searchFieldJson)) {
+        if (! empty($searchFieldJson)) {
             $params['searchFieldJson'] = json_encode($searchFieldJson, JSON_UNESCAPED_UNICODE);
         }
         $searchFormDatasRequest = new SearchFormDatasRequest($params);
@@ -148,7 +146,7 @@ class YiDaServices
             $rs = $client->searchFormDatasWithOptions($searchFormDatasRequest, $searchFormDatasHeaders, new RuntimeOptions([]));
         } catch (\Exception $err) {
             info($err->getMessage().':'.__CLASS__.':'.json_encode($searchFieldJson, JSON_UNESCAPED_UNICODE));
-            if ('InvalidAuthentication' == $err->getCode()) {
+            if ($err->getCode() == 'InvalidAuthentication') {
                 $this->get_access_token();
                 $rs = $this->getFormList($formUuid, $searchFieldJson, $userId, $currentPage, $pageSize);
             }

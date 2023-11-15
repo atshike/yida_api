@@ -1,8 +1,6 @@
 <?php
 
-namespace Atshike\Dingoa\Services;
-
-use Services\YiDaServices;
+namespace Atshike\YidaApi\Services;
 
 class DingNoticeService
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Services;
+namespace Atshike\YidaApi\Services;
 
 use AlibabaCloud\SDK\Dingtalk\Voauth2_1_0\Dingtalk as Dingtalk2;
 use AlibabaCloud\SDK\Dingtalk\Voauth2_1_0\Models\GetAccessTokenRequest;
@@ -23,7 +23,6 @@ use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\UpdateFormDataHeaders;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\UpdateFormDataRequest;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\UpdateFormDataResponse;
 use AlibabaCloud\Tea\Utils\Utils\RuntimeOptions;
-use Atshike\Dingoa\Services\DingNoticeService;
 use Darabonba\OpenApi\Models\Config;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;

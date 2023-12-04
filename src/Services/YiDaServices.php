@@ -11,9 +11,15 @@ use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\CreateOrUpdateFormDataResponse;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\DeleteFormDataHeaders;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\DeleteFormDataRequest;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\DeleteFormDataResponse;
+use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetFormDataByIDHeaders;
+use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetFormDataByIDRequest;
+use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetFormDataByIDResponse;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetOpenUrlHeaders;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetOpenUrlRequest;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetOpenUrlResponse;
+use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\ListTableDataByFormInstanceIdTableIdHeaders;
+use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\ListTableDataByFormInstanceIdTableIdRequest;
+use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\ListTableDataByFormInstanceIdTableIdResponse;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\SaveFormDataHeaders;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\SaveFormDataRequest;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\SaveFormDataResponse;
@@ -154,6 +160,49 @@ class YiDaServices
 
         return $rs;
     }
+
+
+    /**
+     * 获取子表组件数据
+     * https://open.dingtalk.com/document/isvapp/obtain-child-table-component-data
+     */
+    public function obtainChildTable($formUuid, $tableFieldId, $formInstanceId, $userId, $pageNumber = 1, $pageSize = 10): ListTableDataByFormInstanceIdTableIdResponse
+    {
+        $client = self::createClient();
+        $listTableDataByFormInstanceIdTableIdHeaders = new ListTableDataByFormInstanceIdTableIdHeaders([]);
+        $listTableDataByFormInstanceIdTableIdHeaders->xAcsDingtalkAccessToken = $this->access_token;
+        $params = [
+            'appType' => $this->appType,
+            'systemToken' => $this->systemToken,
+            'formUuid' => $formUuid,
+            'tableFieldId' => $tableFieldId,
+            'pageNumber' => $pageNumber,
+            'pageSize' => $pageSize,
+            'userId' => $userId,
+        ];
+        $listTableDataByFormInstanceIdTableIdRequest = new ListTableDataByFormInstanceIdTableIdRequest($params);
+
+        return $client->listTableDataByFormInstanceIdTableIdWithOptions($formInstanceId, $listTableDataByFormInstanceIdTableIdRequest, $listTableDataByFormInstanceIdTableIdHeaders, new RuntimeOptions([]));
+    }
+
+    /**
+     * 实例ID查询表单实例数据.
+     * https://open.dingtalk.com/document/isvapp/query-form-data
+     */
+    public function getFormInstId($instId, $userId): GetFormDataByIDResponse
+    {
+        $client = self::createClient();
+        $getFormDataByIDHeaders = new GetFormDataByIDHeaders([]);
+        $getFormDataByIDHeaders->xAcsDingtalkAccessToken = $this->access_token;
+        $getFormDataByIDRequest = new GetFormDataByIDRequest([
+            'appType' => $this->appType,
+            'systemToken' => $this->systemToken,
+            'userId' => $userId,
+        ]);
+
+        return $client->getFormDataByIDWithOptions($instId, $getFormDataByIDRequest, $getFormDataByIDHeaders, new RuntimeOptions([]));
+    }
+
 
     /**
      * 新增或更新表单实例.

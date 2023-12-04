@@ -3,7 +3,7 @@
 use Atshike\YidaApi\Services\YiDaServices;
 
 $yd = new YiDaServices();
-$data = getData($yd,'FORM-******', 1, 'user_id', [ 'feilds' => 'RUNNING']);
+$data = getData($yd, 'FORM-******', 1, 'user_id', ['feilds' => 'RUNNING']);
 
 function getData($yd, $formUuid, $next, $user_id, $params, $data = [])
 {

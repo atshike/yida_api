@@ -25,6 +25,7 @@ use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\SaveFormDataRequest;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\SaveFormDataResponse;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\SearchFormDatasHeaders;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\SearchFormDatasRequest;
+use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\SearchFormDatasResponse;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\UpdateFormDataHeaders;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\UpdateFormDataRequest;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\UpdateFormDataResponse;
@@ -128,7 +129,7 @@ class YiDaServices
      * 查询表单实例数据列表.
      * https://open.dingtalk.com/document/isvapp/querying-form-instance-data
      */
-    public function getFormList($formUuid, $userId, $searchFieldJson = [], $currentPage = 1, $pageSize = 100)
+    public function getFormList($formUuid, $userId, $searchFieldJson = [], $currentPage = 1, $pageSize = 100): ?SearchFormDatasResponse
     {
         $client = self::createClient();
         $searchFormDatasHeaders = new SearchFormDatasHeaders([]);
@@ -146,7 +147,6 @@ class YiDaServices
         }
         $searchFormDatasRequest = new SearchFormDatasRequest($params);
 
-        $rs = null;
         try {
             $rs = $client->searchFormDatasWithOptions($searchFormDatasRequest, $searchFormDatasHeaders, new RuntimeOptions([]));
         } catch (\Exception $err) {
@@ -158,9 +158,8 @@ class YiDaServices
             DingNoticeService::sendNotify($userId, json_encode($err->getMessage(), JSON_UNESCAPED_UNICODE));
         }
 
-        return $rs;
+        return $rs ?? null;
     }
-
 
     /**
      * 获取子表组件数据
@@ -203,7 +202,6 @@ class YiDaServices
         return $client->getFormDataByIDWithOptions($instId, $getFormDataByIDRequest, $getFormDataByIDHeaders, new RuntimeOptions([]));
     }
 
-
     /**
      * 新增或更新表单实例.
      * https://open.dingtalk.com/document/isvapp/add-or-update-form-instances.
@@ -221,7 +219,7 @@ class YiDaServices
             'searchCondition' => json_encode($searchCondition, JSON_UNESCAPED_UNICODE),
             'formDataJson' => json_encode($formData, JSON_UNESCAPED_UNICODE),
         ]);
-        $rs = null;
+
         try {
             $rs = $client->createOrUpdateFormDataWithOptions($createOrUpdateFormDataRequest, $createOrUpdateFormDataHeaders, new RuntimeOptions([]));
         } catch (\Exception $err) {
@@ -229,14 +227,14 @@ class YiDaServices
             DingNoticeService::sendNotify($userId, json_encode($err->getMessage(), JSON_UNESCAPED_UNICODE));
         }
 
-        return $rs;
+        return $rs ?? null;
     }
 
     /**
      * 新增表单实例.
      * https://open.dingtalk.com/document/isvapp/save-form-data.
      */
-    public function saveFormData($formData, $formUuid, $userId, $appType = null, $systemToken = null): SaveFormDataResponse
+    public function saveFormData($formData, $formUuid, $userId, $appType = null, $systemToken = null): ?SaveFormDataResponse
     {
         $client = self::createClient();
         $saveFormDataHeaders = new SaveFormDataHeaders([]);
@@ -249,7 +247,6 @@ class YiDaServices
             'language' => 'zh_CN',
             'formDataJson' => json_encode($formData, JSON_UNESCAPED_UNICODE),
         ]);
-        $rs = null;
         try {
             $rs = $client->saveFormDataWithOptions($saveFormDataRequest, $saveFormDataHeaders, new RuntimeOptions([]));
         } catch (\Exception $err) {
@@ -257,7 +254,7 @@ class YiDaServices
             DingNoticeService::sendNotify($userId, json_encode($err->getMessage(), JSON_UNESCAPED_UNICODE));
         }
 
-        return $rs;
+        return $rs ?? null;
     }
 
     /**
@@ -277,7 +274,7 @@ class YiDaServices
             'formInstanceId' => $formInstanceId,
             'updateFormDataJson' => json_encode($formData, JSON_UNESCAPED_UNICODE),
         ]);
-        $rs = null;
+
         try {
             $rs = $client->updateFormDataWithOptions($updateFormDataRequest, $updateFormDataHeaders, new RuntimeOptions([]));
         } catch (\Exception $err) {
@@ -285,7 +282,7 @@ class YiDaServices
             DingNoticeService::sendNotify($userId, json_encode($err->getMessage(), JSON_UNESCAPED_UNICODE));
         }
 
-        return $rs;
+        return $rs ?? null;
     }
 
     /**
@@ -323,13 +320,12 @@ class YiDaServices
             'formInstanceId' => $formInstanceId,
         ]);
 
-        $rs = null;
         try {
             $rs = $client->deleteFormDataWithOptions($deleteFormDataRequest, $deleteFormDataHeaders, new RuntimeOptions([]));
         } catch (\Exception $err) {
             info($err->getMessage());
         }
 
-        return $rs;
+        return $rs ?? null;
     }
 }

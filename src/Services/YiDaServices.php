@@ -103,10 +103,10 @@ class YiDaServices
         $url_params = [
             'access_token' => $this->access_token,
         ];
+        $url = $url.'?'.http_build_query($url_params);
         if ($method == 'GET') {
-            $url_params = array_merge($url_params, $params);
+            $url = $url.'?'.http_build_query($params);
         }
-        $url = $url.http_build_query($url_params);
 
         return $client->request($method, $url, $params);
     }
